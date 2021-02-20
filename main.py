@@ -33,6 +33,16 @@ class Meteoro(pygame.sprite.Sprite):
         super().__init__()
         self.image = pygame.image.load(path)
         self.rect = self.image.get_rect(center = (x_pos, y_pos))
+        self.x_speed = x_speed
+        self.y_speed = y_speed
+
+    def movimiento_meteoro(self):
+        self.rect.centerx += self.x_speed
+        self.rect.centery += self.y_speed
+
+
+    def update(self):
+        self.movimiento_meteoro()
 
 # Variables generales
 # Nave
@@ -40,7 +50,7 @@ spaceship = SpaceShip('spaceship/assets/spaceship.png', screen_width/2, 500, 10)
 spaceship_group = pygame.sprite.GroupSingle()
 spaceship_group.add(spaceship)
 # Meteoro
-meteoro1 = Meteoro('spaceship/assets/Meteor1.png', 640, 45, 1, 1)
+meteoro1 = Meteoro('spaceship/assets/Meteor1.png', 640, -100, 1, 3)
 meteoro_group = pygame.sprite.Group()
 meteoro_group.add(meteoro1)
 
@@ -56,6 +66,7 @@ while True:
     spaceship_group.update()
 
     meteoro_group.draw(screen)
+    meteoro_group.update()
 
     pygame.display.update()
     clock.tick(120)
