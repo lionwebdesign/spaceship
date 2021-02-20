@@ -14,8 +14,19 @@ class SpaceShip(pygame.sprite.Sprite):
         self.image = pygame.image.load(path)
         self.rect = self.image.get_rect(center = (x_pos, y_pos))
 
+    def screen_constrain(self):
+        if self.rect.right >= screen_width:
+            self.rect.right = screen_width
+        elif self.rect.left <= 0:
+            self.rect.left = 0
+        elif self.rect.top <= 0:
+            self.rect.top = 0
+        elif self.rect.bottom >= screen_height:
+            self.rect.bottom = screen_height
+
     def update(self):
         self.rect.center = pygame.mouse.get_pos()
+        self.screen_constrain()
 
 # Variables generales
 spaceship = SpaceShip('spaceship/assets/spaceship.png', screen_width/2, 500, 10)
