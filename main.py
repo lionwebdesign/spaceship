@@ -28,10 +28,21 @@ class SpaceShip(pygame.sprite.Sprite):
         self.rect.center = pygame.mouse.get_pos()
         self.screen_constrain()
 
+class Meteoro(pygame.sprite.Sprite):
+    def __init__(self, path, x_pos, y_pos, x_speed, y_speed):
+        super().__init__()
+        self.image = pygame.image.load(path)
+        self.rect = self.image.get_rect(center = (x_pos, y_pos))
+
 # Variables generales
+# Nave
 spaceship = SpaceShip('spaceship/assets/spaceship.png', screen_width/2, 500, 10)
 spaceship_group = pygame.sprite.GroupSingle()
 spaceship_group.add(spaceship)
+# Meteoro
+meteoro1 = Meteoro('spaceship/assets/Meteor1.png', 640, 45, 1, 1)
+meteoro_group = pygame.sprite.Group()
+meteoro_group.add(meteoro1)
 
 while True:
     for event in pygame.event.get():
@@ -43,6 +54,8 @@ while True:
 
     spaceship_group.draw(screen)
     spaceship_group.update()
+
+    meteoro_group.draw(screen)
 
     pygame.display.update()
     clock.tick(120)
