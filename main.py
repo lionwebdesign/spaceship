@@ -14,6 +14,9 @@ class SpaceShip(pygame.sprite.Sprite):
         self.image = pygame.image.load(path)
         self.rect = self.image.get_rect(center = (x_pos, y_pos))
 
+    def update(self):
+        self.rect.center = pygame.mouse.get_pos()
+
 # Variables generales
 spaceship = SpaceShip('spaceship/assets/spaceship.png', screen_width/2, 500, 10)
 spaceship_group = pygame.sprite.GroupSingle()
@@ -28,6 +31,7 @@ while True:
     screen.fill((40, 38, 42))
 
     spaceship_group.draw(screen)
+    spaceship_group.update()
 
     pygame.display.update()
     clock.tick(120)
