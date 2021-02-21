@@ -5,6 +5,7 @@ pygame.init()
 screen_width = 1024
 screen_height = 576
 screen = pygame.display.set_mode((screen_width, screen_height))
+pygame.mouse.set_visible(False)
 clock = pygame.time.Clock()
 
 #Clases 
@@ -50,23 +51,32 @@ spaceship = SpaceShip('spaceship/assets/spaceship.png', screen_width/2, 500, 10)
 spaceship_group = pygame.sprite.GroupSingle()
 spaceship_group.add(spaceship)
 # Meteoro
-meteoro1 = Meteoro('spaceship/assets/Meteor1.png', 640, -100, 1, 3)
-meteoro_group = pygame.sprite.Group()
-meteoro_group.add(meteoro1)
+meteoros_group = pygame.sprite.Group()
+
+METEOROS_EVENT = pygame.USEREVENT
+pygame.time.set_timer(METEOROS_EVENT, 250)
 
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
+        if event.type == METEOROS_EVENT:
+            meteoro_path = random.choice(('spaceship/assets/Meteor1.png', 'spaceship/assets/Meteor2.png', 'spaceship/assets/Meteor3.png'))
+            random_x_pos = random.randrange(0, screen_width)
+            random_y_pos = random.randrange(-1500, -50)
+            random_x_speed = random.randrange(-1, 1)
+            random_y_speed = random.randrange(3, 7)
+            meteoro = Meteoro(meteoro_path, random_x_pos, random_y_pos, random_x_speed, random_y_speed)
+            meteoros_group.add(meteoro)
     
     screen.fill((40, 38, 42))
 
     spaceship_group.draw(screen)
     spaceship_group.update()
 
-    meteoro_group.draw(screen)
-    meteoro_group.update()
+    meteoros_group.draw(screen)
+    meteoros_group.update()
 
     pygame.display.update()
     clock.tick(120)
