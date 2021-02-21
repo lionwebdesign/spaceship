@@ -40,6 +40,8 @@ class Meteoro(pygame.sprite.Sprite):
     def movimiento_meteoro(self):
         self.rect.centerx += self.x_speed
         self.rect.centery += self.y_speed
+        if self.rect.centery >= screen_width + 100:
+            self.kill()
 
 
     def update(self):
