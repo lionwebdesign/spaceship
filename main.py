@@ -10,7 +10,7 @@ clock = pygame.time.Clock()
 
 #Clases 
 class SpaceShip(pygame.sprite.Sprite):
-    def __init__(self, path, x_pos, y_pos, speed):
+    def __init__(self, path, x_pos, y_pos):
         super().__init__()
         self.image = pygame.image.load(path)
         self.rect = self.image.get_rect(center = (x_pos, y_pos))
@@ -47,16 +47,32 @@ class Meteoro(pygame.sprite.Sprite):
     def update(self):
         self.movimiento_meteoro()
 
+class Laser(pygame.sprite.Sprite):
+    def __init__(self, path, pos, speed):
+        super().__init__()
+        self.image = pygame.image.load(path)
+        self.rect = self.image.get_rect(center = pos)
+        self.speed = speed
+
+    def trayectoria_laser(self):
+        self.rect.centery -= self.speed
+        if self.rect.centery <= -50:
+            self.kill()
+
+    def update(self):
+        self.trayectoria_laser()
+
 # Variables generales
 # Nave
-spaceship = SpaceShip('spaceship/assets/spaceship.png', screen_width/2, 500, 10)
+spaceship = SpaceShip('spaceship/assets/spaceship.png', screen_width/2, 500)
 spaceship_group = pygame.sprite.GroupSingle()
 spaceship_group.add(spaceship)
 # Meteoro
 meteoros_group = pygame.sprite.Group()
-
 METEOROS_EVENT = pygame.USEREVENT
 pygame.time.set_timer(METEOROS_EVENT, 250)
+#Laser
+laser_group = pygame.sprite.Group()
 
 while True:
     for event in pygame.event.get():
@@ -71,13 +87,18 @@ while True:
             random_y_speed = random.randrange(3, 7)
             meteoro = Meteoro(meteoro_path, random_x_pos, random_y_pos, random_x_speed, random_y_speed)
             meteoros_group.add(meteoro)
-    
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            new_laser_shot = Laser('spaceship/assets/Laser.png', event.pos, 15)
+            laser_group.add(new_laser_shot)
+
     screen.fill((40, 38, 42))
 
+    laser_group.draw(screen)
     spaceship_group.draw(screen)
-    spaceship_group.update()
-
     meteoros_group.draw(screen)
+
+    laser_group.update()
+    spaceship_group.update()
     meteoros_group.update()
 
     pygame.display.update()
