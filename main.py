@@ -116,8 +116,8 @@ while True:
     if pygame.sprite.spritecollide(spaceship_group.sprite, meteoros_group, True):
         spaceship_group.sprite.get_damage(1)
     #Laser y Meteoros
-    # if pygame.sprite.spritecollide(laser_group.sprite, meteoros_group, True):
-    #     print('Muere puto!!!!')
+    for laser in laser_group:
+        pygame.sprite.spritecollide(laser, meteoros_group, True)
 
     pygame.display.update()
     clock.tick(120)
