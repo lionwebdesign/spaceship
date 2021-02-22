@@ -14,6 +14,8 @@ class SpaceShip(pygame.sprite.Sprite):
         super().__init__()
         self.image = pygame.image.load(path)
         self.rect = self.image.get_rect(center = (x_pos, y_pos))
+        self.shield_surface = pygame.image.load('spaceship/assets/shield.png')
+        self.escudos = 5
 
     def screen_constrain(self):
         if self.rect.right >= screen_width:
@@ -25,9 +27,14 @@ class SpaceShip(pygame.sprite.Sprite):
         elif self.rect.bottom >= screen_height:
             self.rect.bottom = screen_height
 
+    def display_escudo(self):
+        for index, escudo in enumerate(range(self.escudos)):
+            screen.blit(self.shield_surface, (10 + index * 40, 10))
+
     def update(self):
         self.rect.center = pygame.mouse.get_pos()
         self.screen_constrain()
+        self.display_escudo()
 
 class Meteoro(pygame.sprite.Sprite):
     def __init__(self, path, x_pos, y_pos, x_speed, y_speed):
@@ -70,7 +77,7 @@ spaceship_group.add(spaceship)
 # Meteoro
 meteoros_group = pygame.sprite.Group()
 METEOROS_EVENT = pygame.USEREVENT
-pygame.time.set_timer(METEOROS_EVENT, 250)
+pygame.time.set_timer(METEOROS_EVENT, 500)
 #Laser
 laser_group = pygame.sprite.Group()
 
