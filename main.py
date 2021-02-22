@@ -5,6 +5,8 @@ pygame.init()
 screen_width = 1024
 screen_height = 576
 screen = pygame.display.set_mode((screen_width, screen_height))
+game_font = pygame.font.Font(None, 40)
+light_grey = (200, 200, 200)
 pygame.mouse.set_visible(False)
 clock = pygame.time.Clock()
 
@@ -84,6 +86,29 @@ pygame.time.set_timer(METEOROS_EVENT, 500)
 #Laser
 laser_group = pygame.sprite.Group()
 
+def main_game():
+    laser_group.draw(screen)
+    spaceship_group.draw(screen)
+    meteoros_group.draw(screen)
+
+    laser_group.update()
+    spaceship_group.update()
+    meteoros_group.update()
+
+    #Colisiones
+    #Nave y Meteoros
+    if pygame.sprite.spritecollide(spaceship_group.sprite, meteoros_group, True):
+        spaceship_group.sprite.get_damage(1)
+    #Laser y Meteoros
+    for laser in laser_group:
+        pygame.sprite.spritecollide(laser, meteoros_group, True)
+
+def end_game():
+    superficie_texto = game_font.render('Game Over', True, light_grey) 
+    texto_rect = superficie_texto.get_rect(center = (512, 288))
+    screen.blit(superficie_texto, texto_rect)
+
+
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -103,21 +128,10 @@ while True:
 
     screen.fill((40, 38, 42))
 
-    laser_group.draw(screen)
-    spaceship_group.draw(screen)
-    meteoros_group.draw(screen)
-
-    laser_group.update()
-    spaceship_group.update()
-    meteoros_group.update()
-
-    #Colisiones
-    #Nave y Meteoros
-    if pygame.sprite.spritecollide(spaceship_group.sprite, meteoros_group, True):
-        spaceship_group.sprite.get_damage(1)
-    #Laser y Meteoros
-    for laser in laser_group:
-        pygame.sprite.spritecollide(laser, meteoros_group, True)
+    if spaceship_group.sprite.escudos > 0:
+        main_game()
+    else:
+        end_game()
 
     pygame.display.update()
     clock.tick(120)
