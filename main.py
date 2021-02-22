@@ -31,6 +31,9 @@ class SpaceShip(pygame.sprite.Sprite):
         for index, escudo in enumerate(range(self.escudos)):
             screen.blit(self.shield_surface, (10 + index * 40, 10))
 
+    def get_damage(self, damage_amount):
+        self.escudos -= damage_amount
+
     def update(self):
         self.rect.center = pygame.mouse.get_pos()
         self.screen_constrain()
@@ -107,6 +110,14 @@ while True:
     laser_group.update()
     spaceship_group.update()
     meteoros_group.update()
+
+    #Colisiones
+    #Nave y Meteoros
+    if pygame.sprite.spritecollide(spaceship_group.sprite, meteoros_group, True):
+        spaceship_group.sprite.get_damage(1)
+    #Laser y Meteoros
+    for laser in laser_group:
+        pygame.sprite.spritecollide(laser, meteoros_group, True)
 
     pygame.display.update()
     clock.tick(120)
