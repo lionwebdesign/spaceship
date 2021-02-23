@@ -86,6 +86,19 @@ pygame.time.set_timer(METEOROS_EVENT, 500)
 #Laser
 laser_group = pygame.sprite.Group()
 
+def meteoros_setup():
+    meteoro_path = random.choice(('spaceship/assets/Meteor1.png', 'spaceship/assets/Meteor2.png', 'spaceship/assets/Meteor3.png'))
+    random_x_pos = random.randrange(0, screen_width)
+    random_y_pos = random.randrange(-1500, -50)
+    random_x_speed = random.randrange(-1, 1)
+    random_y_speed = random.randrange(3, 7)
+    meteoro = Meteoro(meteoro_path, random_x_pos, random_y_pos, random_x_speed, random_y_speed)
+    meteoros_group.add(meteoro)
+
+def restart_setup():
+    spaceship_group.sprite.escudos = 5
+    meteoros_group.empty()
+
 def main_game():
     laser_group.draw(screen)
     spaceship_group.draw(screen)
@@ -108,25 +121,23 @@ def end_game():
     texto_rect = superficie_texto.get_rect(center = (512, 288))
     screen.blit(superficie_texto, texto_rect)
 
-
-while True:
+def loop_setup():
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
         if event.type == METEOROS_EVENT:
-            meteoro_path = random.choice(('spaceship/assets/Meteor1.png', 'spaceship/assets/Meteor2.png', 'spaceship/assets/Meteor3.png'))
-            random_x_pos = random.randrange(0, screen_width)
-            random_y_pos = random.randrange(-1500, -50)
-            random_x_speed = random.randrange(-1, 1)
-            random_y_speed = random.randrange(3, 7)
-            meteoro = Meteoro(meteoro_path, random_x_pos, random_y_pos, random_x_speed, random_y_speed)
-            meteoros_group.add(meteoro)
+            meteoros_setup()
         if event.type == pygame.MOUSEBUTTONDOWN:
             new_laser_shot = Laser('spaceship/assets/Laser.png', event.pos, 15)
             laser_group.add(new_laser_shot)
+        if event.type == pygame.MOUSEBUTTONDOWN and spaceship_group.sprite.escudos <= 0:
+            restart_setup()
 
     screen.fill((40, 38, 42))
+
+while True:
+    loop_setup()
 
     if spaceship_group.sprite.escudos > 0:
         main_game()
