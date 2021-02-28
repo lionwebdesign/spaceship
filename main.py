@@ -85,6 +85,16 @@ METEOROS_EVENT = pygame.USEREVENT
 pygame.time.set_timer(METEOROS_EVENT, 500)
 #Laser
 laser_group = pygame.sprite.Group()
+#score 
+score = 0
+
+def reinicio_score():
+    return 0
+
+def puntaje():
+    superficie_score = game_font.render(f'Puntuación: {score}', True, light_grey) 
+    score_rect = superficie_score.get_rect(center = (screen_width/2, screen_height/2 + 40))
+    screen.blit(superficie_score, score_rect)
 
 def meteoros_setup():
     meteoro_path = random.choice(('spaceship/assets/Meteor1.png', 'spaceship/assets/Meteor2.png', 'spaceship/assets/Meteor3.png'))
@@ -96,8 +106,10 @@ def meteoros_setup():
     meteoros_group.add(meteoro)
 
 def restart_setup():
+    global score
     spaceship_group.sprite.escudos = 5
     meteoros_group.empty()
+    score = 0
 
 def main_game():
     laser_group.draw(screen)
@@ -116,10 +128,18 @@ def main_game():
     for laser in laser_group:
         pygame.sprite.spritecollide(laser, meteoros_group, True)
 
+    superficie_score = game_font.render(f'{score}', True, light_grey) 
+    score_rect = superficie_score.get_rect(center = (screen_width - 50, 30))
+    screen.blit(superficie_score, score_rect)
+
+    return 1
+
 def end_game():
     superficie_texto = game_font.render('Game Over', True, light_grey) 
-    texto_rect = superficie_texto.get_rect(center = (512, 288))
+    texto_rect = superficie_texto.get_rect(center = (screen_width/2, screen_height/2))
     screen.blit(superficie_texto, texto_rect)
+
+    puntaje()
 
 def loop_setup():
     for event in pygame.event.get():
@@ -140,9 +160,10 @@ while True:
     loop_setup()
 
     if spaceship_group.sprite.escudos > 0:
-        main_game()
+        score += main_game()
     else:
         end_game()
+    
 
     pygame.display.update()
     clock.tick(120)
