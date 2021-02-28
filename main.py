@@ -85,11 +85,9 @@ METEOROS_EVENT = pygame.USEREVENT
 pygame.time.set_timer(METEOROS_EVENT, 500)
 #Laser
 laser_group = pygame.sprite.Group()
+#laser_timer = 0
 #score 
 score = 0
-
-def reinicio_score():
-    return 0
 
 def puntaje():
     superficie_score = game_font.render(f'Puntuación: {score}', True, light_grey) 
@@ -153,7 +151,7 @@ def loop_setup():
             laser_group.add(new_laser_shot)
         if event.type == pygame.MOUSEBUTTONDOWN and spaceship_group.sprite.escudos <= 0:
             restart_setup()
-
+            
     screen.fill((40, 38, 42))
 
 while True:
